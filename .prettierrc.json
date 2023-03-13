@@ -1,0 +1,8 @@
+{
+  "bracketSpacing": false,
+  "importOrder": ["^[.]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "printWidth": 110,
+  "singleQuote": true
+}

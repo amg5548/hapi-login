@@ -1,0 +1,32 @@
+@host = http://localhost:3000
+@refreshToken = {{login.response.body.refreshToken}}
+
+###
+
+# @name login
+# @prompt username
+POST {{host}}/login
+
+{
+    "username": "{{username}}"
+}
+
+###
+
+GET {{host}}/greet
+
+###
+
+POST {{host}}/refresh
+
+{
+    "refreshToken": "{{refreshToken}}"
+}
+
+###
+
+DELETE {{host}}/logout
+
+{
+    "refreshToken": "{{refreshToken}}"
+}
