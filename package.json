@@ -13,8 +13,7 @@
   "author": "",
   "license": "ISC",
   "engines": {
-    "node": "18.14.0",
-    "npm": ">=9.3.1"
+    "node": ">=18.16.1 <19"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
