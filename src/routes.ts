@@ -3,7 +3,7 @@ import {ServerRoute} from '@hapi/hapi';
 import Joi from 'joi';
 import {JwtPayload, sign, verify} from 'jsonwebtoken';
 
-const whitelist: string[] = [];
+const tokens: string[] = [];
 
 const accessSecret = process.env.HAPI_LOGIN_ACCESS_TOKEN_SECRET as string;
 const refreshSecret = process.env.HAPI_LOGIN_REFRESH_TOKEN_SECRET as string;
@@ -17,7 +17,7 @@ const routes: ServerRoute[] = [
         expiresIn: '1d',
       });
 
-      whitelist.push(refreshToken);
+      tokens.push(refreshToken);
 
       return h.response({refreshToken}).state(
         'accessToken',
@@ -58,7 +58,10 @@ const routes: ServerRoute[] = [
     method: 'POST',
     path: '/refresh',
     handler: ({payload: {refreshToken}}: Request & {payload: {refreshToken: string}}, h) => {
-      if (!whitelist.includes(refreshToken)) {
+      // mock find query
+      const token = tokens.find((t) => t === refreshToken);
+
+      if (!token) {
         return unauthorized();
       }
 
@@ -87,13 +90,14 @@ const routes: ServerRoute[] = [
     method: 'DELETE',
     path: '/logout',
     handler: ({payload: {refreshToken}}: Request & {payload: {refreshToken: string}}, h) => {
-      const index = whitelist.indexOf(refreshToken);
+      const index = tokens.indexOf(refreshToken);
 
-      if (index === -1) {
+      // mock delete query
+      const {length} = tokens.splice(index, index === -1 ? 0 : 1);
+
+      if (!length) {
         return unauthorized();
       }
-
-      whitelist.splice(index, 1);
 
       return h.response({message: 'Successfully logged out!'}).unstate('accessToken');
     },
