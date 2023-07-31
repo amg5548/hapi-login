@@ -58,10 +58,7 @@ const routes: ServerRoute[] = [
     method: 'POST',
     path: '/refresh',
     handler: ({payload: {refreshToken}}: Request & {payload: {refreshToken: string}}, h) => {
-      // mock find query
-      const token = tokens.find((t) => t === refreshToken);
-
-      if (!token) {
+      if (!tokens.includes(refreshToken)) {
         return unauthorized();
       }
 
@@ -92,12 +89,11 @@ const routes: ServerRoute[] = [
     handler: ({payload: {refreshToken}}: Request & {payload: {refreshToken: string}}, h) => {
       const index = tokens.indexOf(refreshToken);
 
-      // mock delete query
-      const {length} = tokens.splice(index, index === -1 ? 0 : 1);
-
-      if (!length) {
+      if (index < 0) {
         return unauthorized();
       }
+
+      tokens.splice(index, 1);
 
       return h.response({message: 'Successfully logged out!'}).unstate('accessToken');
     },
